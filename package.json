@@ -1,0 +1,23 @@
+{
+  "name": "disforge.js",
+  "version": "0.0.8",
+  "description": "An api wrapper for disforge.com",
+  "main": "disforge.js",
+  "scripts": {
+    "test": "node test/index.js"
+  },
+  "keywords": [
+    "api",
+    "disforge",
+    "discord.js"
+  ],
+  "author": "Xynnix",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akrasio/disforge.js.git"
+  },
+  "dependencies": {
+    "wumpfetch": "^0.3.1"
+  }
+}
