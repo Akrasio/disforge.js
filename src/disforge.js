@@ -38,7 +38,6 @@ class Client {
             .then(res => res.json())
     }
     /**
-     * 
      * @param Client The Discord.js Client
      * @returns 
      */
@@ -74,6 +73,18 @@ class Client {
         if (Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
             return "Starting Autopost every hour (within an hour)";
         }
+    }
+    /**
+     * @param servers Server count
+     * @param client The Discord.js Client
+     * @returns 
+     */
+    async post(servers, client){
+        await fetch('https://disforge.com/api/botstats/' + botId, {
+            method: 'POST',
+            body:  JSON.stringify({'servers': Number(servers)}),
+            headers: {'Content-Type': 'application/json', 'authorization': this.KEY},
+        }).then(async (res) => {console.log(await res.json())})
     }
     /**
      * @param string "servers_total_members", "servers", "servers_total_members", "bots", "bots_total_servers", "bots_awaiting_approval", "registered_users", "last_updated"
