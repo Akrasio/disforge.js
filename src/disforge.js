@@ -11,16 +11,10 @@ class Client {
      * @returns 
      */
     async postStats(bot) {
-        let servercount;
+        let servercount = 0;
         if (!this.KEY) throw new TypeError('API token not provided');
         if (typeof bot.user.id !== 'string') throw new TypeError('Bot ID must be a string');
-        if (Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
-            bot.shard.fetchClientValues('guilds.cache.size')
-                .then(results => {
-                    servercount = Number(results.reduce((acc, guildCount) => acc + guildCount, 0));
-                })
-                .catch(console.error);
-        } else if (Number(bot.shard.count == 1)) servercount = Number(bot.guilds.cache.size);
+        servercount = this.guilds.reduce((acc, guildCount) => acc + guildCount, 0)
         if (typeof servercount !== 'number') throw new TypeError('Server count must be a valid number');
         return fetch(`${endpoints.botStats}${bot.user.id}`, {
             method: 'POST',
@@ -38,18 +32,18 @@ class Client {
      * @param { Object } Bot The Discord.js Client
      * @returns Number
      */
-    async count(bot) {
+
+    async guilds(bot) {
         let servercount;
-        if (!this.KEY) throw new TypeError('API token not provided');
-        if (typeof bot.user.id !== 'string') throw new TypeError('Bot ID must be a string');
         if (Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
-            bot.shard.fetchValues('guilds.cache.size')
+            return bot.shard.fetchClientValues('guilds.cache.size')
                 .then(results => {
-                    servercount = Number(results.reduce((acc, guildCount) => acc + guildCount, 0));
+                    return results
                 })
-                .catch(console.error);
-        } else if (Number(bot.shard.count == 1)) servercount = bot.guilds.cache.size;
-        return servercount;
+        } else if (Number(bot.shard.count == 1)) {
+            servercount = bot.guilds.cache.size;
+            return servercount;
+        }
     }
     /**
      * 
@@ -61,13 +55,8 @@ class Client {
         if (!this.KEY) throw new TypeError('API token not provided');
         if (typeof bot.user.id !== 'string') throw new TypeError('Bot ID must be a string');
         setInterval(async (bot) => {
-            if (Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
-                bot.shard.fetchClientValues('guilds.cache.size')
-                    .then(results => {
-                        servercount = Number(results.reduce((acc, guildCount) => acc + guildCount, 0));
-                    })
-                    .catch(console.error);
-            } else if (Number(bot.shard.count == 1)) servercount = bot.guilds.cache.size;
+            servercount = this.guilds.reduce((acc, guildCount) => acc + guildCount, 0)
+            if (typeof bot.user.id !== 'string') throw new TypeError('Bot ID must be a string');
             if (typeof servercount !== 'number') throw new TypeError('Server count must be a valid number');
             fetch(`${endpoints.botStats}${bot.user.id}`, {
                 method: 'POST',
