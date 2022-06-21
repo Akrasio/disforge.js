@@ -15,7 +15,7 @@ class Client {
         if (!this.KEY) throw new TypeError('API token not provided');
         if (typeof bot.user.id !== 'string') throw new TypeError('Bot ID must be a string');
         if (Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
-            client.shard.fetchClientValues('guilds.cache.size')
+            bot.shard.fetchClientValues('guilds.cache.size')
                 .then(results => {
                     servercount = Number(results.reduce((acc, guildCount) => acc + guildCount, 0));
                 })
@@ -43,7 +43,7 @@ class Client {
         if (!this.KEY) throw new TypeError('API token not provided');
         if (typeof bot.user.id !== 'string') throw new TypeError('Bot ID must be a string');
         if (Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
-            client.shard.fetchClientValues('guilds.cache.size')
+            bot.shard.fetchValues('guilds.cache.size')
                 .then(results => {
                     servercount = Number(results.reduce((acc, guildCount) => acc + guildCount, 0));
                 })
@@ -62,7 +62,7 @@ class Client {
         if (typeof bot.user.id !== 'string') throw new TypeError('Bot ID must be a string');
         setInterval(async (bot) => {
             if (Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
-                client.shard.fetchClientValues('guilds.cache.size')
+                bot.shard.fetchClientValues('guilds.cache.size')
                     .then(results => {
                         servercount = Number(results.reduce((acc, guildCount) => acc + guildCount, 0));
                     })
