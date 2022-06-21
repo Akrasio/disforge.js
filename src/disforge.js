@@ -11,10 +11,20 @@ class Client {
      * @returns 
      */
     async postStats(bot) {
-        let servercount = 0;
+        let servercount;
         if (!this.KEY) throw new TypeError('API token not provided');
         if (typeof bot.user.id !== 'string') throw new TypeError('Bot ID must be a string');
-        servercount = this.guilds.reduce((acc, guildCount) => acc + guildCount, 0)
+        if (Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
+            const promises = [
+                bot.shard.fetchClientValues('guilds.cache.size')
+            ];
+            await Promise.all(promises)
+                .then(results => {
+                    const totalGuilds = results[0].reduce((acc, guildCount) => acc + guildCount, 0);
+                    return servercount = Number(totalGuilds);
+                })
+                .catch(console.error);
+        } else if (Number(bot.shard.count == 1)) servercount = Number(bot.guilds.cache.size);
         if (typeof servercount !== 'number') throw new TypeError('Server count must be a valid number');
         return fetch(`${endpoints.botStats}${bot.user.id}`, {
             method: 'POST',
@@ -29,24 +39,6 @@ class Client {
     }
     /**
      * 
-     * @param { Object } Bot The Discord.js Client
-     * @returns Number
-     */
-
-    async guilds(bot) {
-        let servercount;
-        if (Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
-            return bot.shard.fetchClientValues('guilds.cache.size')
-                .then(results => {
-                    return results
-                })
-        } else if (Number(bot.shard.count == 1)) {
-            servercount = bot.guilds.cache.size;
-            return servercount;
-        }
-    }
-    /**
-     * 
      * @param Client The Discord.js Client
      * @returns 
      */
@@ -55,8 +47,17 @@ class Client {
         if (!this.KEY) throw new TypeError('API token not provided');
         if (typeof bot.user.id !== 'string') throw new TypeError('Bot ID must be a string');
         setInterval(async (bot) => {
-            servercount = this.guilds.reduce((acc, guildCount) => acc + guildCount, 0)
-            if (typeof bot.user.id !== 'string') throw new TypeError('Bot ID must be a string');
+            if (Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
+                const promises = [
+                    bot.shard.fetchClientValues('guilds.cache.size')
+                ];
+                await Promise.all(promises)
+                    .then(results => {
+                        const totalGuilds = results[0].reduce((acc, guildCount) => acc + guildCount, 0);
+                        return servercount = Number(totalGuilds);
+                    })
+                    .catch(console.error);
+            } else if (Number(bot.shard.count == 1)) servercount = bot.guilds.cache.size;
             if (typeof servercount !== 'number') throw new TypeError('Server count must be a valid number');
             fetch(`${endpoints.botStats}${bot.user.id}`, {
                 method: 'POST',
