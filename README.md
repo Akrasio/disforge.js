@@ -30,6 +30,15 @@ client.login("YourDiscordBotTokenIsHere");
 api.stats("servers_total_members").then(result => {
     console.log(result)
 });
+// 10m RateLimit on checking votes
+client.on("messageCreate", async(msg) =>{
+                if(msg.author.bot) return;
+                if (msg.content.toLowerCase() == ";voted"){
+                        api.checkVote(client).then(res =>{
+                                console.log(res)
+                                msg.reply(`${res}`)                                           })
+                }
+})
 ```
 
 -> [disforge.com](https://disforge.com)
