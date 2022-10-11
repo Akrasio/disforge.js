@@ -7,9 +7,9 @@ class Client {
     };
 
     /**
-     * 
+     *
      * @param { Object } Bot The Discord.js Client
-     * @returns 
+     * @returns
      */
     async postStats(bot) {
         let servercount;
@@ -26,8 +26,9 @@ class Client {
                 })
                 .catch(console.error);
         } else if (Number(bot.shard.count == 1)) servercount = Number(bot.guilds.cache.size);
-        if (typeof servercount !== 'number') throw new TypeError('Server count must be a valid number');
-        return fetch(`${endpoints.botStats}${bot.user.id}`, {
+	if (bot.shard.count == bot.shard.ids[0] +1){
+        if (!Number(servercount)) throw new TypeError('Server count must be a valid number');
+          return fetch(`${endpoints.botStats}${bot.user.id}`, {
             method: 'POST',
             headers: {
                 'Authorization': this.KEY,
@@ -37,11 +38,16 @@ class Client {
             }
         }).send()
             .then(res => res.json())
+	} else {
+		return ""
+        }
+
     }
     /**
      * @param Client The Discord.js Client
-     * @returns 
+     * @returns
      */
+
     async autoPost(bot) {
         let servercount;
         if (!this.KEY) throw new TypeError('API token not provided');
@@ -58,7 +64,8 @@ class Client {
                     })
                     .catch(console.error);
             } else if (Number(bot.shard.count == 1)) servercount = bot.guilds.cache.size;
-            if (typeof servercount !== 'number') throw new TypeError('Server count must be a valid number');
+	if (bot.shard.count == bot.shard.ids[0] +1){
+            if (!Number(servercount)) throw new TypeError('Server count must be a valid number');
             fetch(`${endpoints.botStats}${bot.user.id}`, {
                 method: 'POST',
                 headers: {
@@ -70,11 +77,16 @@ class Client {
             }).send()
                 .then(res => res.json())
             return console.log("Attempted to post server count.")
+           }
         }, 3600000);
         if (Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
             return "Starting Autopost every hour (within an hour)";
-        }
+        } else if(Number(bot.shard.count == 1)){
+            return "Starting Autopost every hour (within an hour)";
+      }
+	return ""
     }
+
     /**
      * @param servers Server count
      * @param client The Discord.js Client
