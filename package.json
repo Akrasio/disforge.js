@@ -18,6 +18,7 @@
     "url": "git+https://github.com/Akrasio/disforge.js.git"
   },
   "dependencies": {
+    "discord.js": "^13.12.0",
     "wumpfetch": "^0.3.1"
   }
 }

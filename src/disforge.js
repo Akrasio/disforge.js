@@ -99,9 +99,23 @@ class Client {
             headers: {'Content-Type': 'application/json', 'authorization': this.KEY},
         }).then(async (res) => {console.log(await res.json())})
     }
+
     /**
+     * @param client The Discord.js Client
+     * @returns Object | String | Number
+     */
+    async checkVote(bot){
+        return fetch(`${endpoints.votes}/${bot.user.id}`, {
+            method: 'GET'
+        }).send()
+            .then(res => res.json()).then(json => {
+		if (!json || json.status && json.status == "error") return json.message;
+	                return (json.votes)
+            })
+   }
+     /*
      * @param string "servers_total_members", "servers", "servers_total_members", "bots", "bots_total_servers", "bots_awaiting_approval", "registered_users", "last_updated"
-     * @returns Object | String | Number 
+     * @returns Object | String | Number
      */
     async stats(data) {
         return fetch(`${endpoints.stats}`, {
