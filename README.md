@@ -7,7 +7,7 @@ npm i disforge.js
 
 ```js
 const Discord = require("discord.js");
-const client = new Discord.Client(); 
+const client = new Discord.Client();
 const Disforge = require('disforge.js');
 const api = new Disforge.Client("Your-Disforge-API-Key-Here");
 
@@ -31,13 +31,14 @@ api.stats("servers_total_members").then(result => {
     console.log(result)
 });
 // 10m RateLimit on checking votes
-client.on("messageCreate", async(msg) =>{
-                if(msg.author.bot) return;
-                if (msg.content.toLowerCase() == ";voted"){
-                        api.checkVote(client).then(res =>{
-                                console.log(res)
-                                msg.reply(`${res}`)                                           })
-                }
+client.on("messageCreate", async (msg) => {
+    if (msg.author.bot) return;
+    if (msg.content.toLowerCase() == ";voted") {
+        api.checkVote(client).then(res => {
+            console.log(res)
+            msg.reply(`${res}`)
+        })
+    }
 })
 ```
 
