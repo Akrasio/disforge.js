@@ -1,6 +1,6 @@
 {
   "name": "disforge.js",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "An api wrapper for disforge.com",
   "main": "disforge.js",
   "scripts": {
