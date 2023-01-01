@@ -81,9 +81,9 @@ class Client {
             return console.log("Attempted to post server count.")
            }
         }, 3600000);
-        if (typeof bot.shard !== "undefined" && Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
+        if (typeof bot.shard !== "undefined" || typeof bot.shard !== "null" && Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
             return "Starting Autopost every hour (within an hour)";
-        } else if(Number(bot.shard.count == 1) || typeof bot.shard === "undefined"){
+        } else if(Number(bot.shard.count == 1) || typeof bot.shard === "undefined" ||  typeof bot.shard !== "null" ){
             return "Starting Autopost every hour (within an hour)";
       }
 	return ""
