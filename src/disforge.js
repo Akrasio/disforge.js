@@ -15,7 +15,7 @@ class Client {
         let servercount;
         if (!this.KEY) throw new TypeError('API token not provided');
         if (typeof bot.user.id !== 'string') throw new TypeError('Bot ID must be a string');
-        if (Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
+        if (typeof bot.shard !== "undefined" && Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
             const promises = [
                 bot.shard.fetchClientValues('guilds.cache.size')
             ];
@@ -25,8 +25,9 @@ class Client {
                     return servercount = Number(totalGuilds);
                 })
                 .catch(console.error);
-        } else if (Number(bot.shard.count == 1)) servercount = Number(bot.guilds.cache.size);
-	if (bot.shard.count == bot.shard.ids[0] +1){
+        }
+	if (typeof bot.shard === "undefined"||  Number(bot.shard?.count == 1)) servercount = bot.guilds.cache.size;
+	if (bot.shard.count == bot.shard.ids[0] + 1){
         if (!Number(servercount)) throw new TypeError('Server count must be a valid number');
           return fetch(`${endpoints.botStats}${bot.user.id}`, {
             method: 'POST',
@@ -53,7 +54,7 @@ class Client {
         if (!this.KEY) throw new TypeError('API token not provided');
         if (typeof bot.user.id !== 'string') throw new TypeError('Bot ID must be a string');
         setInterval(async (bot) => {
-            if (Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
+            if (typeof bot.shard !== "undefined" &&Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
                 const promises = [
                     bot.shard.fetchClientValues('guilds.cache.size')
                 ];
@@ -63,7 +64,8 @@ class Client {
                         return servercount = Number(totalGuilds);
                     })
                     .catch(console.error);
-            } else if (Number(bot.shard.count == 1)) servercount = bot.guilds.cache.size;
+            }
+	if (typeof bot.shard === "undefined" || Number(bot.shard?.count == 1)) servercount = bot.guilds.cache.size;
 	if (bot.shard.count == bot.shard.ids[0] +1){
             if (!Number(servercount)) throw new TypeError('Server count must be a valid number');
             fetch(`${endpoints.botStats}${bot.user.id}`, {
@@ -79,9 +81,9 @@ class Client {
             return console.log("Attempted to post server count.")
            }
         }, 3600000);
-        if (Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
+        if (typeof bot.shard !== "undefined" && Number(bot.shard.count >= 2) && (Number(bot.shard.ids[0]) + 1) == Number(bot.shard.count)) {
             return "Starting Autopost every hour (within an hour)";
-        } else if(Number(bot.shard.count == 1)){
+        } else if(Number(bot.shard.count == 1) || typeof bot.shard === "undefined"){
             return "Starting Autopost every hour (within an hour)";
       }
 	return ""
