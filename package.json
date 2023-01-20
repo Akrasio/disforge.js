@@ -18,7 +18,6 @@
     "url": "git+https://github.com/Akrasio/disforge.js.git"
   },
   "dependencies": {
-    "node-fetch": "^2.6.7",
     "wumpfetch": "^0.3.1"
   }
 }
