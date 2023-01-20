@@ -1,6 +1,5 @@
 const { endpoints } = require("./end")
 const fetch = require("wumpfetch");
-const nf = require("node-fetch");
 class Client {
     constructor(token) {
         this.KEY = token;
@@ -95,11 +94,16 @@ class Client {
      * @returns 
      */
     async post(servers, client){
-        await nf('https://disforge.com/api/botstats/' + client.user.id, {
+        await fetch(`${endpoints.botStats}${bot.user.id}`, {
             method: 'POST',
-            body:  JSON.stringify({'servers': Number(servers)}),
-            headers: {'Content-Type': 'application/json', 'authorization': this.KEY},
-        }).then(async (res) => {console.log(await res.json())})
+            data: {
+		    'servers': servers,
+                },
+	    headers: {
+		    'Authorization': this.KEY
+	    },
+	}).send()
+                .then(res => res.json())
     }
 
     /**
