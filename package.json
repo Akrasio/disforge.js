@@ -3,9 +3,7 @@
   "version": "0.1.0",
   "description": "An api wrapper for disforge.com",
   "main": "disforge.js",
-  "scripts": {
-    "test": "node test/index.js"
-  },
+  "scripts": {},
   "keywords": [
     "api",
     "disforge",
